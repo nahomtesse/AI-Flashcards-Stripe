@@ -15,6 +15,10 @@ export default function SignUpPage()
                     </Typography>
                 </Toolbar>
 
+                <Button color='inherit' >
+                    <Link href="/">Home</Link>
+                </Button>
+
                 <Button color='inherit'>
                     <Link href="/sign-in" password>Login</Link>
                 </Button>

@@ -14,6 +14,10 @@ export default function SignUpPage()
                         Flashcard Saas
                     </Typography>
                 </Toolbar>
+                
+                <Button color='inherit'>
+                    <Link href="/">Home</Link>
+                </Button>
 
                 <Button color='inherit'>
                     <Link href="/sign-in" password>Login</Link>
@@ -22,6 +26,7 @@ export default function SignUpPage()
                 <Button color='inherit'>
                     <Link href="/sign-up" password>Sign Up</Link>
                 </Button>
+                
             </AppBar>
 
             <Box display='flex' flexDirection="column" alignItems='center' justifyContent='center'>
