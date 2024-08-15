@@ -16,11 +16,11 @@ export default function SignUpPage()
                 </Toolbar>
 
                 <Button color='inherit'>
-                    <Link href="/login" password>Login</Link>
+                    <Link href="/sign-in" password>Login</Link>
                 </Button>
 
                 <Button color='inherit'>
-                    <Link href="/signup" password>Signup</Link>
+                    <Link href="/sign-up" password>Sign Up</Link>
                 </Button>
             </AppBar>
 
