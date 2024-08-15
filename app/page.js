@@ -1,11 +1,18 @@
+'use client';
+
 import Image from "next/image";
 import getStripe from "@/utils/get-stripe";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { AppBar, Toolbar, Typography, Container, Button , Box, Grid, Item} from "@mui/material";
 import Head from 'next/head';
 import zIndex from "@mui/material/styles/zIndex";
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+
+  const router = useRouter();
+
+
   return (
     <Box maxWidth='100vw' sx={{backgroundColor: '#081C15', color: '#D8F3DC'}}>
       <Head>
@@ -20,10 +27,10 @@ export default function Home() {
           </Typography>
 
           <SignedOut>
-            <Button color="inherit" variant="h5">
+            <Button color="inherit" variant="h5" onClick={() => router.push('/sign-in')}>
               Login
             </Button >
-            <Button color="inherit" variant="h5">
+            <Button color="inherit" variant="h5" onClick={() => router.push('/sign-up')}>
               Signup
             </Button>
           </SignedOut>
