@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Typography, Container, Button , Box, Grid, Item} from 
 import Head from 'next/head';
 import zIndex from "@mui/material/styles/zIndex";
 import { useRouter } from 'next/navigation';
+import GetStarted from './getStarted.js';
 
 export default function Home() {
 
@@ -44,9 +45,10 @@ export default function Home() {
       <Box justifyContent={'center'} alignContent={'center'} textAlign={'center'} my={25}>
         <Typography variant="h2" >Welcome to flashcard Saas</Typography>
         <Typography>The easiest ways to make flash cards from scratch</Typography>
-        <Button variant="contained" color="primary" sx={{mt:2, backgroundColor: "#003B2C"}}>
+        {/* <Button variant="contained" color="primary" sx={{mt:2, backgroundColor: "#003B2C"}}>
             Get started
-        </Button>
+        </Button> */}
+         <GetStarted />
       </Box>
 
       <Box my={20}>
