@@ -9,7 +9,7 @@ const GetStarted = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push('/get-started'); 
+    router.push('/sign-in'); 
   };
 
   return (
