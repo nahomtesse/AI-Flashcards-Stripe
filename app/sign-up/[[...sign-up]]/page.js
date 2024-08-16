@@ -26,7 +26,7 @@ export default function SignUpPage() {
                     <Typography variant='h4' sx={{ marginBottom: 2 }}>
                         Signup
                     </Typography>
-                    <SignUp />
+                    <SignUp afterSignUpUrl="/sign-in" />
                 </Box>
             </Container>
         </Box>

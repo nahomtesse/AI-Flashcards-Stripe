@@ -26,7 +26,7 @@ export default function SignInPage() {
                     <Typography variant='h4' sx={{ marginBottom: 2 }}>
                         Signin
                     </Typography>
-                    <SignIn />
+                    <SignIn afterSignInUrl="/get-started" />
                 </Box>
             </Container>
         </Box>
