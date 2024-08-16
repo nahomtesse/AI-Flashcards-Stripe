@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Typography, Box, Button, Grid, TextField } from '@mui/material';
 import Head from 'next/head';
 import OpenAI from "openai";
-require('dotenv').config();
+//require('dotenv').config();
 
 const GetStarted = () => {
   const [inputText, setInputText] = useState('');
