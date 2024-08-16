@@ -3,21 +3,52 @@
 import React, { useState } from 'react';
 import { Typography, Box, Button, Grid, TextField } from '@mui/material';
 import Head from 'next/head';
+import OpenAI from "openai";
+require('dotenv').config();
 
 const GetStarted = () => {
   const [inputText, setInputText] = useState('');
   const [flashcards, setFlashcards] = useState([]);
 
+  const openai = new OpenAI({
+    dangerouslyAllowBrowser: true,
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  });
+
+  const getBotResponse = async (message) => {
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "meta-llama/llama-3.1-8b-instruct:free",
+        messages: [
+          { role: "user", content: message }
+        ],
+      });
+      const response = completion.choices[0].message.content;
+
+      return response;
+    } catch (error) {
+      console.error("Error fetching bot response:", error);
+      return "Sorry, something went wrong.";
+    }
+  };
+
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
 
-  const handleGenerateFlashcards = () => {
-    // Example hardcoded flashcard
-    const generatedFlashcards = [
-      { id: 1, question: 'This is a Question?', answer: 'This is the answer for the question.' },
-    ];
-    setFlashcards(generatedFlashcards);
+  const handleGenerateFlashcards = async () => {
+    try {
+      const botResponse = await getBotResponse(inputText);
+
+      const generatedFlashcards = [
+        { id: 1, question: 'Generated Question?', answer: botResponse },
+      ];
+
+      setFlashcards(generatedFlashcards);
+    } catch (error) {
+      console.error("Error generating flashcards:", error);
+    }
   };
 
   return (
