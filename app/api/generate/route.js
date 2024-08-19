@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
+// Define the system prompt
 const systemPrompt = `
 You are a flashcard creator designed to assist with career recommendations and educational quizzes. Your flashcards should:
 
@@ -18,28 +19,37 @@ Return in the following JSON format
 {
   "flashcards": [{
      "front": str,
-     "Back": str
-}]
+     "back": str
+  }]
 }
-`
+`;
 
-export async function POST(req){
-    const opeanai = OpenAI();
-    const data = await req.text();
+const openai = new OpenAI({
+  dangerouslyAllowBrowser: true,
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-    const completion = await openai.chat.completions.create({
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: data },
-        ],
-        model: 'gpt-4o',
-        response_format: { type: 'json_object' },
-      })
+export async function POST(req) {
+  const data = await req.text();
+  //const { text } = data;
+
+  try {
     
+    const response = await openai.chat.completions.create({
+      model: 'meta-llama/llama-3.1-8b-instruct:free',
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: data }
+      ],
+      response_format: { type: 'json_object' },
+    });
 
-      // Parse the JSON response from the OpenAI API
-    const flashcards = JSON.parse(completion.choices[0].message.content)
 
-    // Return the flashcards as a JSON response
-    return NextResponse.json(flashcards.flashcards)
+    const flashcards = JSON.parse(response.choices[0].message.content);
+
+    return NextResponse.json(flashcards.flashcards);
+  } catch (error) {
+    return NextResponse.json({ error: `OpenAI API error: ${error.message}` }, { status: 500 });
+  }
 }
