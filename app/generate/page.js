@@ -1,40 +1,51 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Typography, Box, Button, Grid, TextField, CardContent, Card } from '@mui/material';
+import { Typography, Box, Button, Grid, TextField, CardContent, Card, CardActionArea  } from '@mui/material';
 import Head from 'next/head';
 
 const GetStarted = () => {
   const [inputText, setInputText] = useState('');
   const [flashcards, setFlashcards] = useState([]);
+  const [flipped, setFlipped] = useState({});
 
-  const handleInputChange = (event) => {
-    setInputText(event.target.value);
-  };
+  // const handleInputChange = (event) => {
+  //   setInputText(event.target.value);
+  // };
 
   const handleGenerateFlashcards = async () => {
     if (!inputText.trim()) {
-      alert('Please enter some text to generate flashcards.');
-      return;
+      alert('Please enter some text to generate flashcards.')
+      return
     }
-
+  
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
         body: inputText,
-      });
-
+      })
+  
       if (!response.ok) {
-        throw new Error('Failed to generate flashcards');
+        throw new Error('Failed to generate flashcards')
       }
-
-      const data = await response.json();
-      setFlashcards(data);
+  
+      const data = await response.json()
+      setFlashcards(data.flashcards)
     } catch (error) {
-      console.error('Error generating flashcards:', error);
-      alert('An error occurred while generating flashcards. Please try again.');
+      console.error('Error generating flashcards:', error)
+      alert('An error occurred while generating flashcards. Please try again.')
     }
   };
+
+  const handleCardClick = (id) => {
+    setFlipped((prev) => ({
+        ...prev,
+        [id]: !prev[id],
+    }))
+    }
+    React.useEffect(() => {
+      console.log('Number of flashcards:', flashcards.length);
+    }, [flashcards]);
 
   return (
     <Box maxWidth="100vw" sx={{ backgroundColor: '#081C15', color: '#D8F3DC', padding: 2 }}>
@@ -57,7 +68,7 @@ const GetStarted = () => {
           rows={4}
           variant="outlined"
           value={inputText}
-          onChange={handleInputChange}
+          onChange={(e) => setInputText(e.target.value)}
           sx={{
             width: '100%',
             maxWidth: 600,
@@ -88,12 +99,13 @@ const GetStarted = () => {
               {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card>
+                  <CardActionArea onClick={() => handleCardClick(index)}>
                     <CardContent>
-                      <Typography variant="h6" mb={2}>Front:</Typography>
-                      <Typography>{flashcard.front}</Typography>
-                      <Typography variant="h6" mb={2} sx={{ mt: 2 }}>Back:</Typography>
-                      <Typography>{flashcard.back}</Typography>
+                      {/* <Typography variant="h6" mb={2}>Front:</Typography> */}
+                      {/* <Typography>{flashcard.front}</Typography> */}
+                      <Typography>{flipped[index] ? flashcard.back : flashcard.front}</Typography>
                     </CardContent>
+                    </CardActionArea>
                   </Card>
                 </Grid>
               ))}

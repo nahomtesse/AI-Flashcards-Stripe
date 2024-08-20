@@ -13,7 +13,7 @@ const GetStarted = () => {
 
   const handleButtonClick = () => {
     if (isSignedIn) {
-      router.push('/get-started');
+      router.push('/generate');
     } else {
       router.push('/sign-in');
     }
