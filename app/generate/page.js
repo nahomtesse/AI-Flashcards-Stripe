@@ -1,13 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Typography, Box, Button, Grid, TextField, CardContent, Card, CardActionArea  } from '@mui/material';
+import { Typography, Box, Button, Grid, TextField, CardContent, Card, CardActionArea, Container, Dialog, DialogContentText, DialogAction, DialogTitle, DialogActions, DialogContent  } from '@mui/material';
 import Head from 'next/head';
+import {useUser} from '@clerk/nextjs'
+import {writeBatch} from 'firebase/firestore'
+import {useRouter} from 'next/navigation'
+import db from '@/firebase'
+import {doc, collection,setDoc, getDoc } from 'firebase/firestore'
 
 const GetStarted = () => {
+  const {isLoaded, isSignedIn, user} = useUser()
   const [inputText, setInputText] = useState('');
   const [flashcards, setFlashcards] = useState([]);
   const [flipped, setFlipped] = useState({});
+  const [name, setName] = useState('')
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   // const handleInputChange = (event) => {
   //   setInputText(event.target.value);
@@ -42,10 +51,52 @@ const GetStarted = () => {
         ...prev,
         [id]: !prev[id],
     }))
+    };
+
+    const handleOpen = () => {
+      setOpen(true)
     }
-    React.useEffect(() => {
-      console.log('Number of flashcards:', flashcards.length);
-    }, [flashcards]);
+
+    const handleClose = () => {
+      setOpen(false)
+    }
+
+    const saveFlashcards = async () => {
+      if (!name) {
+        alert('Pleae enter a name')
+        return
+      }
+
+      const batch = writeBatch(db);
+      const userDocRef = doc(collection(db, 'users'), user.id)
+      const docSnap = await getDoc(userDocRef)
+
+      if (docSnap.exists()) {
+        const collections = docSnap.data().flashcards || []
+        if (collections.find((f) => f.name === name)) {
+          alert("Flashcard collection with the name already exists.")
+          return;
+        }
+        else {
+          collections.push({name})
+          batch.set(userDocRef, {flashcards: collections}, {merge: true})
+        }
+      }
+
+      else {
+        batch.set(userDocRef, {flashcards: [{name}]})
+      }
+
+      const colRef = collection(userDocRef, name)
+      flashcards.forEach((flashcard) => {
+        const cardDocRef = doc(colRef)
+        batch.set(cardDocRef, flashcard)
+      })
+
+      await batch.commit()
+      handleClose()
+      router.push('/flashcards')
+    }
 
   return (
     <Box maxWidth="100vw" sx={{ backgroundColor: '#081C15', color: '#D8F3DC', padding: 2 }}>
@@ -111,6 +162,36 @@ const GetStarted = () => {
               ))}
             </Grid>
           )}
+            <Box sx={{mt: 4, display: 'flex', justifyContent: 'center'}}>
+              <Button variant="contained" color="secondary" onClick={handleOpen} sx={{ mt: 2, backgroundColor: '#003B2C' }}>
+                Save
+              </Button>
+            </Box>
+
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Save Flashcards</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please enter a name for your flashcards collection
+                </DialogContentText>
+                <TextField
+                autoFocus
+                margin='dense'
+                label="Collection Name"
+                type ="text"
+                fullWidth 
+                value={name}
+                onChange={(e)=> setName(e.target.value)}
+                variant="outlined"
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={saveFlashcards}>
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
         </Box>
       </Box>
     </Box>

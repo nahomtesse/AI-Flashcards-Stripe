@@ -13,6 +13,32 @@ export default function Home() {
 
   const router = useRouter();
 
+  const handleSubmit = async (subscriptionType) => {
+    const checkoutSession = await fetch('/api/checkout_sessions', {
+      method: 'POST',
+      headers: {
+        origin: 'http://localhost:3000'
+      },
+      body: JSON.stringify({ subscriptionType }),
+    })
+
+    const checkoutSessionJson = await checkoutSession.json()
+
+    if (checkoutSession.statusCode === 500) {
+      console.error(checkoutSession.message)
+      return
+    } 
+
+    const stripe = await getStripe()
+    const {error} = await stripe.redirectToCheckout({
+      sessionId: checkoutSessionJson.id,
+    })
+
+    if (error) {
+      console.warn(error.message)
+    }
+  }
+
 
   return (
     <Box maxWidth='100vw' sx={{backgroundColor: '#081C15', color: '#D8F3DC'}}>
@@ -72,7 +98,7 @@ export default function Home() {
                 Search flashcards
               </Typography>
               <Typography variant='h6'>
-                 Our AI intelligently  breaks down your text into concise flashcards, perfect for studying
+                 Our AI intelligently breaks down your text into concise flashcards, perfect for studying
               </Typography>
             </Grid>
 
@@ -117,10 +143,10 @@ export default function Home() {
                     $5 per month
                 </Typography>
                 <Typography variant='h6' mb={5}>
-                    Access to badic card features and limited storage
+                    Access to basic card features and limited storage
                 </Typography>
 
-                <Button  sx={{backgroundColor :'#2D6A4F', color:'white'}} >
+                <Button  sx={{backgroundColor :'#2D6A4F', color:'white'}} onClick={() => handleSubmit('basic')} >
                   Choose basic
                 </Button>
           
@@ -151,7 +177,7 @@ export default function Home() {
                     Unlimited flashcard and storage with priority reports
                 </Typography>
 
-                <Button  sx={{backgroundColor :'#2D6A4F', color:'white'}} >
+                <Button  sx={{backgroundColor :'#2D6A4F', color:'white'}} onClick={() => handleSubmit('pro')} >
                   Choose Pro
                 </Button>
           
