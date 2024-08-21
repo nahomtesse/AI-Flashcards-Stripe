@@ -8,11 +8,7 @@ import {writeBatch} from 'firebase/firestore'
 import {useRouter} from 'next/navigation'
 import db from '@/firebase'
 import {doc, collection,setDoc, getDoc } from 'firebase/firestore'
-import dynamic from 'next/dynamic';
 
-const ClientComponent = dynamic(() => import('../components/ClientComponent'), {
-    ssr: false, // This disables server-side rendering for this component
-});
 
 
 const GetStarted = () => {
