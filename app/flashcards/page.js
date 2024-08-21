@@ -7,6 +7,12 @@ import { collection, CollectionReference, doc, getDoc, setDoc } from 'firebase/f
 import db from '@/firebase'
 import { useRouter } from 'next/navigation';
 import { Card, CardActionArea, CardContent, Typography, Container, Grid } from '@mui/material';
+import dynamic from 'next/dynamic';
+
+const ClientComponent = dynamic(() => import('../components/ClientComponent'), {
+    ssr: false, // This disables server-side rendering for this component
+});
+
 
 export default function Flashcards() {
     const {isLoaded, isSignedIn, user } = useUser()
