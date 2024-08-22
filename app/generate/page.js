@@ -25,8 +25,7 @@ const GetStarted = () => {
   // };
 
   const handleGenerateFlashcards = async () => {
-    if (typeof window === 'undefined') return;
-    
+
     if (!inputText.trim()) {
       alert('Please enter some text to generate flashcards.')
       return

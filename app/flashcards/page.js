@@ -15,8 +15,6 @@ export default function Flashcards() {
     const router = useRouter()
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
-        
         async function getFlashcards() {
             if (!user) return; 
                 const docRef = doc(collection(db, 'users'), user.id)

@@ -20,25 +20,25 @@ export default function Flashcard() {
     const searchParams = useSearchParams();
    
     const search = searchParams.get('id')
-    
+
 
     useEffect(() => {
-
-        if (typeof window === 'undefined') return;
-        async function getFlashcard() {
-                 if (!search || !user) return;
-
+        if (typeof window !== 'undefined') {
+            async function getFlashcard() {
+                if (!search || !user) return;
+    
                 setCollectionName(search)
                 const colRef = collection(doc(collection(db, 'users'), user.id), search)
                 const docs = await getDocs(colRef)
                 const flashcards = []
-
-            docs.forEach((doc)=> {
-                flashcards.push({id: doc.id, ...doc.data()})
-            })
-            setFlashcards(flashcards)
+    
+                docs.forEach((doc) => {
+                    flashcards.push({ id: doc.id, ...doc.data() })
+                })
+                setFlashcards(flashcards)
+            }
+            getFlashcard()
         }
-        getFlashcard()
     }, [search, user])
 
     const handleCardClick = (id) => {
