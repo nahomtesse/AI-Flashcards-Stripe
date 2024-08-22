@@ -44,7 +44,7 @@ const GetStarted = () => {
       const data = await response.json()
       setFlashcards(data.flashcards)
     } catch (error) {
-      console.error('Error generating flashcards:', error)
+      //console.error('Error generating flashcards:', error)
       alert('An error occurred while generating flashcards. Please try again.')
     }
   };

@@ -23,7 +23,6 @@ export default function Flashcard() {
 
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
             async function getFlashcard() {
                 if (!search || !user) return;
     
@@ -38,7 +37,6 @@ export default function Flashcard() {
                 setFlashcards(flashcards)
             }
             getFlashcard()
-        }
     }, [search, user])
 
     const handleCardClick = (id) => {

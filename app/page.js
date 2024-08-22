@@ -25,7 +25,7 @@ export default function Home() {
     const checkoutSessionJson = await checkoutSession.json()
 
     if (checkoutSession.statusCode === 500) {
-      console.error(checkoutSession.message)
+      //console.error(checkoutSession.message)
       return
     } 
 
@@ -35,7 +35,7 @@ export default function Home() {
     })
 
     if (error) {
-      console.warn(error.message)
+      //console.warn(error.message)
     }
   }
 
