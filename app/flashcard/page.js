@@ -23,6 +23,8 @@ export default function Flashcard() {
     
 
     useEffect(() => {
+
+        if (typeof window === 'undefined') return;
         async function getFlashcard() {
                  if (!search || !user) return;
 
