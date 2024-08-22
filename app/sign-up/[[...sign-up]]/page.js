@@ -1,3 +1,5 @@
+'use client';
+
 import { AppBar, Container, Toolbar, Link, Button, Typography, Box } from "@mui/material";
 import { SignUp } from '@clerk/nextjs'
 

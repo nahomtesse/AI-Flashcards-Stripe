@@ -41,7 +41,7 @@ export default function Flashcards() {
     }
 
     return (
-        <Container maxWidth="xl" sx={{ backgroundColor: '#041c15', color: '#ffffff', paddingBottom: 4 }}>
+        <Container maxWidth="100vw" sx={{ backgroundColor: '#041c15', color: '#ffffff', paddingBottom: 4 }}>
         <Grid container spacing={3} sx={{ mt: 4 }}>
             {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
